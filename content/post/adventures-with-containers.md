@@ -7,7 +7,7 @@ title = "Adventures with container networking"
 
 I've recently started playing with LXC containers, both on physical hardware and in the cloud. This blog is itself running in a LXC container running on a virtual machine in an OpenStack public cloud.
 
-One of my main interests was to understand what the different patterns look like for external network access to services running containerised like this. By default LXD will configure an internal bridge, with DNSmasq providing internal IP addresses to containers. If you want to then open those services to external access, there are a number of different approaches you can take - you can use iptables to direct traffic from the host to the container, you can do routing, or as I'm going to explore, you can bridge your containers onto your external network directly.  
+One of my main interests was to understand what the different patterns look like for external network access to services running containerised like this. By default LXD will configure an internal bridge, with DNSmasq providing internal IP addresses to containers. If you want to then open those services to external access, there are a number of different approaches you can take - you can use iptables to direct traffic from the host to the container, you can do L3 routing via your LXD host, or as I'm going to explore, you can bridge your containers onto your external network directly.  
 
 If you're running on a LAN, then it's trivial to re-configure LXD to use a bridge with an external physical interface directly connected to the LAN. In this configuration, LXC containers will come up bridged directly to your physical network and can get an IP from an external DHCP server.
 
