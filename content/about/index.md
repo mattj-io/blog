@@ -9,7 +9,7 @@ You can find the 'official' version on [LinkedIn](https://uk.linkedin.com/in/mat
 
 Long story short, I've been building cool stuff with open source software for nearly 20 years, on hardware from tiny embedded boards to enterprise class behemoths. 
 
-As a species we're on a rapidly accelerating journey to true utility computing, and I'm interested in the emerging toolsets and workflows which get us there. 
+As an industry we're on a rapidly accelerating journey to true on-demand utility computing, and I'm interested in the emerging toolsets and workflows which get us there. 
 
 Views my own, yadda yadda yadda.
 
