@@ -5,7 +5,7 @@ theme = "hugo-cactus-theme"
 # Enter your tracking code to enable Google Analytics
 googleAnalytics = ""
 # Disable comments by leaving disqusShortname empty
-disqusShortname = ""
+disqusShortname = "www-mattjarvis-org-uk"
 
 [params]
 	name = "Matt Jarvis"
@@ -36,7 +36,7 @@ disqusShortname = ""
 	tweet = ""
 	share = ""
 	# 404 page
-	title404 = ""
+	title404 = "I'm sorry Dave, I'm afraid I can't do that"
 	subtitle404 = ""
 
 	# Choose a font for the social icons in the footer. Either "mono-social" or "font-awesome"
