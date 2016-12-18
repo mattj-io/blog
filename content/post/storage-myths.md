@@ -5,13 +5,15 @@ date = "2015-01-21T10:56:37Z"
 
 +++
 
-This article was originally published by Tech Week Europe, the original article can be found [here](http://www.silicon.co.uk/data-storage/5-storage-myths-put-pasture-159933). As of the end of 2016, many of these concepts have already penetrated deeply into the enterprise space - object storage and distributed storage architectures are rapidly becoming the standard approaches. Storage class memory will fundamentally alter the storage space, and potentially the computing architectures which we've essentially followed for the last 50 years, and we're starting to see [mainstream](http://www.intel.co.uk/content/www/uk/en/architecture-and-technology/non-volatile-memory.html) products appear in that space. Revisiting this piece, I'm still most interested in the final two points, around how we interact with data and the potential for storage to become transformative pipelines. I expect to see both of these spaces continue to produce innovation over the next few years. 
+This article was originally published by Tech Week Europe, the original article can be found [here](http://www.silicon.co.uk/data-storage/5-storage-myths-put-pasture-159933). As of the end of 2016, many of these concepts have already penetrated deeply into the enterprise space - object storage and distributed storage architectures are rapidly becoming the standard approaches. 
+
+The coming revolution of storage class memory will fundamentally alter the storage space again, and potentially the computing architectures which we've essentially followed for the last 50 years. We're now starting to see [mainstream](http://www.intel.co.uk/content/www/uk/en/architecture-and-technology/non-volatile-memory.html) products appear in that space. Revisiting this piece, I'm still most interested in the final two points, around how we interact with data and the potential for storage to become transformative pipelines. I expect to see both of these spaces continue to produce innovation over the next few years. 
 
 -----------------
 
 The biggest and most performant storage architecture technologies were developed by companies like Google, Amazon and Facebook, which grew out of university research projects in the 1990s. The business and operational drivers which initially led these hyper-scale web operators to build such architectures were, of course, very different to those of a typical enterprise. The sheer volume of data those high-growth internet businesses were dealing with at the time forced them to look outside the box in a way that smaller enterprises were not required to do.
 
-Given the rapidly increasing data volumes all businesses are experiencing today, is it now time to rethink how we manage data across all other enterprise too?
+Given the rapidly increasing data volumes all businesses are experiencing today, is it now time to rethink how we manage data across all other enterprises too?
 
 ##### Myth 1: We need to backup key data
 
