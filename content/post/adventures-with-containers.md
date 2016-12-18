@@ -110,7 +110,7 @@ The next thing we need to do is spin up our first LXD host in this subnet.
 
 For our host virtual machine to work as we want in our container infrastructure, we need to change the default networking, from a single virtual ethernet interface to a bridge containing that virtual ethernet interface, with the DHCP address on the bridge rather than the interface directly. We can then configure LXD to use our bridge, and containers will be directly on the Neutron network. OpenStack doesn't support creating instances with bridged networking, so we'll have to automate this in a different way. 
 
-In order to do this, we'll leverage some of the magic of cloud-init, passing configuration in when we boot our instance. For those of you not too familiar with cloud-init, it's the mechanism by which networking generally gets configured in cloud platforms, but it can do a ton of other cool stuff. It's well worth a read of the docs at https://cloudinit.readthedocs.io/en/latest
+In order to do this, we'll leverage some of the magic of cloud-init, passing configuration in when we boot our instance. For those of you not too familiar with cloud-init, it's the mechanism by which networking generally gets configured in cloud platforms, but it can do a ton of other cool stuff. It's well worth a read of the [docs](https://cloudinit.readthedocs.io/en/latest).
 
 To do interesting stuff with cloud-init, we need to pass in some yaml to nova when we boot our instance, and here's what I'm passing in :
 
