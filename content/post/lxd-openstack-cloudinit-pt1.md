@@ -15,7 +15,7 @@ In my scenario, I'm not running on a LAN, my container host is going to be a vir
 
 I started from the perspective of hoping I could put together a fully automatable workflow for handling this in a public cloud environment without native support for LXD ie. one without the nova-lxd service. If you're running nova-lxd in your OpenStack cloud then all this stuff 'just works', since the nova-lxd driver integrates directly with Neutron. If your public cloud doesn't have native support for LXD, then we need to get a bit more creative.
 
-Ultimately what I'm trying to achieve here is a fully automatable workflow using only native OpenStack and LXD tooling to deliver LXD container services which can be consumed by the outside world.  
+Ultimately what I'm trying to achieve here is a fully automatable workflow using only native OpenStack and LXD tooling to deliver LXD container services which can be consumed by the outside world. Everything that's required to do this should also be fully scriptable from a remote shell, giving us control over the automation.  
 
 So taking my bridge pattern, the first thing I'm going to need to do is to bridge my virtual machines network interface, and switch LXD to use that bridge, so my containers are directly on the Neutron network.
 

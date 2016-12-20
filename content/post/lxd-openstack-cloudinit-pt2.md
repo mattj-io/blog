@@ -5,7 +5,7 @@ date = "2016-12-18T13:03:07Z"
 
 +++
 
-So in my previous post, we automatically deployed and configured a LXD host into our OpenStack public cloud tenancy, using only the native features of OpenStack and cloud-init. 
+So in my previous post, we automatically deployed and configured an LXD host into our OpenStack public cloud tenancy, using only the native features of OpenStack and cloud-init. 
 
 Let's take a look at that instance and confirm everything is as it should be.
 
@@ -133,11 +133,7 @@ devices:
     type: nic
 ```
 
-All good so far, our networking configuration is correct, and LXD is configured as we'd expect. We need to make one change to the default profile. Since we'll be setting static IP addresses on container boot, we want to make sure cloud-init doesn't then try to configure the interface via DHCP, which can cause cloud-init to take a long time to execute. 
-
-```
-MacBook-Pro:~ matt$ ssh -i ~/.ssh/mattj_dc ubuntu@185.98.151.85 'lxc profile set default user.network_mode link-local'
-``` 
+All good so far, our networking configuration is correct, and LXD is configured as we'd expect.
 
 Let's move on to creating the configuration for our containers. 
 
@@ -173,7 +169,9 @@ If we were to use the raw lxc approach, we would also need to make one change to
 MacBook-Pro:~ matt$ ssh -i ~/.ssh/mattj_dc ubuntu@185.98.151.85 'lxc profile set default user.network_mode link-local'
 ``` 
 
-But since all of that is unsupported, we never know if this facility might be removed in later version, so we'll take an alternative approach. 
+In this mode you'd also need to set the DNS for the container very early in the boot process, because a lot of cloud-init depends on this and will fail without it ( Hint - the cloud-init bootcmd module is your friend )
+
+But since all of that is unsupported, we never know if this facility might be removed without warning in later versions, so we'll take an alternative approach. 
 
 When creating it's own bridge, LXD can spawn a DNSmasq instance onto the bridge and provide DHCP to containers. However, when we use our own bridge, the assumption is that we are providing DHCP externally and LXD won't configure this. 
 
