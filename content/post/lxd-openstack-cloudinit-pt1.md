@@ -9,13 +9,19 @@ I've recently started playing with LXC containers, both on physical hardware and
 
 One of my main interests was to understand what the different patterns look like for external network access to services running containerised like this. By default LXD will configure an internal bridge, with DNSmasq providing internal IP addresses to containers. If you want to then open those services to external access, there are a number of different approaches you can take - you can use iptables to direct traffic from the host to the container, you can do L3 routing via your LXD host, or as I'm going to explore, you can bridge your containers onto your external network directly.  
 
-If you're running on a LAN, then it's trivial to re-configure LXD to use a bridge with an external physical interface directly connected to the LAN. In this configuration, LXC containers will come up bridged directly to your physical network and can get an IP from an external DHCP server.
+If you're running on a LAN, then it's trivial to re-configure LXD to use a bridge with an external physical interface directly connected to the LAN. In that configuration, LXC containers will come up bridged directly to your physical network and can get an IP from an external DHCP server.
 
-In my scenario, I'm not running on a LAN, my container host is a virtual machine in a public OpenStack cloud. I started from the perspective of hoping I could put together a fully automatable workflow for handling this in a public cloud environment, ie. one without the nova-lxd service. If you're running nova-lxd in your OpenStack cloud then all this stuff 'just works', since the nova-lxd driver integrates directly with Neutron. If your public cloud doesn't have native support for LXD, then your options are slightly more limited. What I'm trying to achieve is a fully automatable workflow using only native OpenStack and LXD tooling to deliver LXD container services which can be consumed by the outside world.  
+In my scenario, I'm not running on a LAN, my container host is going to be a virtual machine in a public OpenStack cloud. 
 
-So taking my bridge pattern, my first exploration was to bridge my virtual machine interface, and switch LXD to use that bridge. Before I'd thought that through properly, I had hoped I might be able to get an address from OpenStack's DHCP directly to my container, but Neutron uses fixed host definitions in DHCP, which are only created when a virtual machine is instantiated, so that won't actually work, since the Neutron provided DHCP server only serves addresses for virtual instances it knows about. 
+I started from the perspective of hoping I could put together a fully automatable workflow for handling this in a public cloud environment without native support for LXD ie. one without the nova-lxd service. If you're running nova-lxd in your OpenStack cloud then all this stuff 'just works', since the nova-lxd driver integrates directly with Neutron. If your public cloud doesn't have native support for LXD, then we need to get a bit more creative.
 
-My next thought was to create a network without OpenStack DHCP, and either run my own DHCP or use fixed addressing. This was also a slight brick wall, since cloud init in cloud images generally expects to have the network interfaces definition delivered by the OpenStack metadata service, which again requires DHCP. It's possible to deliver this via an attached config drive, but your provider needs to support this, and mine doesn't currently. I could have created my own images, but then this somewhat breaks the idea of what I'm trying to achieve here in terms of simple automation. 
+Ultimately what I'm trying to achieve here is a fully automatable workflow using only native OpenStack and LXD tooling to deliver LXD container services which can be consumed by the outside world.  
+
+So taking my bridge pattern, the first thing I'm going to need to do is to bridge my virtual machines network interface, and switch LXD to use that bridge, so my containers are directly on the Neutron network.
+
+ I had initially hoped I might be able to get an IP address from OpenStack's DHCP directly to my container, but once I'd thought that through properly I realised that wasn't going to work. Neutron uses fixed host definitions in DHCP, which are only created when a virtual machine is instantiated, so the Neutron provided DHCP server only serves addresses for virtual instances it knows about. 
+
+My next thought was to create a network without OpenStack DHCP, and either run my own DHCP or use fixed addressing. This was also a dead end, since cloud init in cloud images generally expects to have the network interfaces definition delivered by the OpenStack metadata service, which again requires DHCP. It's possible to deliver this via an attached config drive, but your provider needs to support this, and mine doesn't currently. I could have created my own virtual machine images to support this model, but then this somewhat breaks the idea of what I'm trying to achieve here in terms of simple automation that will work anywhere. 
 
 Finally, I decided to try and use a mixture of DHCP and fixed addressing within my OpenStack network, with the LXD virtual hosts getting their IP's from Neutron DHCP, and my containers being configured with static addresses, but bridged directly into the Neutron network. 
 
@@ -38,7 +44,7 @@ Firstly, let's gather the ID's we'll need :
 | be9b8434-7ec2-46e3-9c5f-5759440a2b06 | default  | a2b72e5b-48ec-46f0-ab40-df56e698bea2 192.168.0.0/24 |
 +--------------------------------------+----------+-----------------------------------------------------+
 ```
-Apologies for the formatting here, I'm still working this theme to display OpenStack CLI output correctly. The ID we're interested in is the bottom one for the default network. Now we've got that, let's get the subnet ID. 
+Apologies for the formatting here, I'm still working this blog theme to display OpenStack CLI output correctly. The ID we're interested in is the bottom one for the default network. Now we've got that, let's get the subnet ID. 
 ```
 (openstack)MacBook-Pro:DCOS matt$ neutron net-show be9b8434-7ec2-46e3-9c5f-5759440a2b06
 +-----------------+--------------------------------------+
@@ -55,7 +61,7 @@ Apologies for the formatting here, I'm still working this theme to display OpenS
 | tenant_id       | c71e35d5f6034d45aad211e6a7784b6d     |
 +-----------------+--------------------------------------+
 ```
-If we take a look at that subnet, we can see the DHCP range is set to use the entire address range
+If we take a look at that subnet, we can see the DHCP range is set to use the entire address range, which is the default behaviour.
 ```
 (openstack)MacBook-Pro:DCOS matt$ neutron subnet-show a2b72e5b-48ec-46f0-ab40-df56e698bea2
 +-------------------+--------------------------------------------------+
@@ -112,7 +118,7 @@ For our host virtual machine to work as we want in our container infrastructure,
 
 In order to do this, we'll leverage some of the magic of cloud-init, passing configuration in when we boot our instance. For those of you not too familiar with cloud-init, it's the mechanism by which networking generally gets configured in cloud platforms, but it can do a ton of other cool stuff. It's well worth a read of the [docs](https://cloudinit.readthedocs.io/en/latest).
 
-To do interesting stuff with cloud-init, we need to pass in some yaml to nova when we boot our instance, and here's what I'm passing in :
+To do interesting stuff with cloud-init, we need to pass in some yaml to nova when we boot our instance, and here's what I'm passing to it, in a local file I've imaginatively named config.yaml :
 
 ```
 #cloud-config
@@ -176,7 +182,7 @@ packages:
 
 This is the standard pattern for a cloud-init entry, the top level key is the cloud-init module to use, and the data following is the configuration for that module. In this case, the packages module, which takes an array of package names as its data.
 
-We then want to write a couple of files to the filesystem, using the aptly named write_files module. The first one is our new network interfaces file with our bridge configuration
+We then want to write a couple of files to the filesystem, using the aptly named write_files module.
 
 ```
 write_files:
