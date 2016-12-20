@@ -1,4 +1,4 @@
-baseurl = "http://192.168.0.39/"
+baseurl = "http://localhost:1313/"
 languageCode = "en-us"
 title = "Nothing to see here"
 theme = "hugo-cactus-theme"

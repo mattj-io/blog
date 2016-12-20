@@ -181,7 +181,7 @@ Now remember our br0 is bridged at Layer 2 directly onto the Neutron provided ne
 
 However, DNSmasq can be configured so that it will only respond to specific requests, which as long as we're careful shouldn't interfere with the Neutron DHCP server. 
 
-As I explained in the [first](/posts/lxd-openstack-cloudinit-pt1) part of this blog, during the cloud-init phase we passed some DNSmasq configuration into our virtual machine, so let's take a look at that again:
+As I explained in the [first](/post/lxd-openstack-cloudinit-pt1) part of this blog, during the cloud-init phase we passed some DNSmasq configuration into our virtual machine, so let's take a look at that again:
 
 ```
  - path: /etc/dnsmasq.d/lxd.conf
