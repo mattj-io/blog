@@ -201,7 +201,8 @@ dhcp-host=hugo,192.168.0.100
 
 Now when DNSmasq sees a DHCP request with hostname set to hugo, it will respond with an address of 192.168.0.100. We don't need to worry about the Neutron DHCP server responding, as it won't respond to any requests it doesn't already know about, and as long as we don't use the same hostnames for containers and virtual machines, we should be OK.  
 
-The nice thing about this is that we also get DNS for free, since DNSmasq will serve DNS too and configure that in 
+The nice thing about this is that we also get DNS for free, since DNSmasq will serve DNS too, using the local DNS settings on our LXD host as it's upstream resolver. 
+ 
 Now our container will come up with the correct IP address assigned, and we can add the rest of our configuration. You can edit the profile interactively using :
 
 ```
