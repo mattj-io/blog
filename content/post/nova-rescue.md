@@ -1,6 +1,6 @@
 +++
-title = "nova rescue"
-description = ""
+title = "Nova Rescue"
+description = "Using the rescue functionality in Nova"
 date = "2015-10-22T07:56:59Z"
 
 +++

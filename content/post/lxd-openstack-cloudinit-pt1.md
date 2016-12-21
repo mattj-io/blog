@@ -1,7 +1,7 @@
 +++
 date = "2016-12-15T11:40:59Z"
 description = "Adventures with container networking"
-title = "LXD, OpenStack and cloud-init pt1"
+title = "LXD, OpenStack and cloud-init - Part 1"
 
 +++
 

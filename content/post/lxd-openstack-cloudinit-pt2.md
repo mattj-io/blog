@@ -1,5 +1,5 @@
 +++
-title = "LXD, OpenStack and cloud-init pt2"
+title = "LXD, OpenStack and cloud-init - Part 2"
 description = "More adventures with container networking"
 date = "2016-12-18T13:03:07Z"
 
@@ -150,7 +150,9 @@ Profile hugo created
 
 We're calling it hugo since this container will run the [hugo](https://gohugo.io/) static website engine.
 
-There's some [discussion](https://github.com/lxc/lxd/issues/1259) around the idiomatics of creating LXD containers with static IP's - the recommended way appears to be to configure the network interfaces file inside the container and then restart it, but to me this seems to add an additional step of complexity where it's not needed. It feels like this should be possible by injecting the interfaces configuration in the user.meta-data field for cloud-init, but I couldn't get that to work either with a standard Ubuntu container image. 
+There's some [discussion](https://github.com/lxc/lxd/issues/1259) around the idiomatics of creating LXD containers with static IP's - the recommended way appears to be to configure the network interfaces file inside the container and then restart it, but to me this seems to add an additional step of complexity where it's not needed.
+
+It feels like this should be possible by injecting the interfaces configuration in the user.meta-data field for cloud-init, but I couldn't get that to work with a standard Ubuntu 16.04 LXD image. 
 
 Another option is to use the unsupported raw.lxc configuration flags, which inject the networking configuration directly into the kernel. To set the configuration for this over ssh, we need to pipe it into the lxc config command as it's multi-line.
 
@@ -171,7 +173,7 @@ MacBook-Pro:~ matt$ ssh -i ~/.ssh/mattj_dc ubuntu@185.98.151.85 'lxc profile set
 
 In this mode you'd also need to set the DNS for the container very early in the boot process, because a lot of cloud-init depends on this and will fail without it ( Hint - the cloud-init bootcmd module is your friend )
 
-But since all of that is unsupported, we never know if this facility might be removed without warning in later versions, so we'll take an alternative approach. 
+The raw lxc approach works well, at the small cost of a few more lines of cloud-init, but since all of that is unsupported, we never know if this facility might be removed without warning in later versions, so we'll take an alternative approach. 
 
 When creating it's own bridge, LXD can spawn a DNSmasq instance onto the bridge and provide DHCP to containers. However, when we use our own bridge, the assumption is that we are providing DHCP externally and LXD won't configure this. 
 
@@ -331,3 +333,4 @@ PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 rtt min/avg/max/mdev = 6.837/7.086/7.335/0.249 ms
 ```
 
+Bear in mind this is very simplistic and only works well for self-contained services. What we really need is for every service to suport gossip type protocols, and can announce capabilities and monitoring points. 
