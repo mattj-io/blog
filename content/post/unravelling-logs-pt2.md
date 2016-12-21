@@ -5,12 +5,16 @@ title = "Unravelling Logs - Part 2"
 
 +++
 
-*2016 UPDATE log-courier came into existence as a fork of the original [logstash-forwarder](https://github.com/elastic/logstash-forwarder), which had become fairly unmaintained, and didn't support some features the community needed. Elastic have now introduced [filebeat](https://www.elastic.co/products/beats/filebeat), which is probably the best way to do this now.
+##### 2016 UPDATE
+
+log-courier came into existence as a fork of the original [logstash-forwarder](https://github.com/elastic/logstash-forwarder), which had become fairly unmaintained, and didn't support some features the community needed. Elastic have now introduced [filebeat](https://www.elastic.co/products/beats/filebeat), which is probably the best way to do this now.
 
 I also never did manage to complete pt3 of this blog set, which was supposed to cover using Riemann for automated log file analysis. At the time we seemed to be one of the few people using it, and it's a black art with config files written in [Clojure](https://clojure.org/). 
 
 James Turnbull's [The Art of Monitoring](https://www.artofmonitoring.com/) has been released in the meantime which makes major use of Riemann, so I should really revisit this at some point.  
-* 
+
+--------------------------------------------
+
 
 In my first post in this series, I talked about the ELK stack of Elasticsearch, Logstash and Kibana and how they provide the first steps into automated logfile analysis. 
 

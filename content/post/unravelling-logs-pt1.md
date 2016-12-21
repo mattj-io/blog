@@ -35,6 +35,6 @@ Luckily for us, the open source world has a set of fantastic tools for doing exa
 
 [ElasticSearch](https://www.elastic.co/products/elasticsearch) is a distributed search engine, written in Java and built on top of the [Apache Lucene](https://lucene.apache.org/core/) search technology. It’s massively horizontally scalable and super fast. 
 
-[Kibana](https://www.elastic.co/products/kibana) provides a highly configurable graphical frontend into ElasticSearch, and last but not least [Logstash](https://www.elastic.co/products/logstash) is a log storage and processing system.  i
+[Kibana](https://www.elastic.co/products/kibana) provides a highly configurable graphical frontend into ElasticSearch, and last but not least [Logstash](https://www.elastic.co/products/logstash) is a log storage and processing system.
 
 Over this short series of blog posts, I’ll be going end to end across some of the approaches we’re adopting, including how we’re using the ELK stack, which hopefully may be of some use to others out there in starting to unravel your logs.
