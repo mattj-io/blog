@@ -333,4 +333,97 @@ PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 rtt min/avg/max/mdev = 6.837/7.086/7.335/0.249 ms
 ```
 
-Bear in mind this is very simplistic and only works well for self-contained services. What we really need is for every service to suport gossip type protocols, and can announce capabilities and monitoring points. 
+The final piece of the puzzle here is how to get external network traffic in to our service, and for this we're going to leverage the Load Balancer as a Service functionality of OpenStack. My provider only currently support LBaaS v1, so that's what I'm going to use.
+
+```
+(openstack)MacBook-Pro:DCOS matt$ neutron lb-pool-create --name web --protocol HTTP --subnet-id a2b72e5b-48ec-46f0-ab40-df56e698bea2 --lb-method ROUND_ROBIN
+Created a new pool:
++------------------------+--------------------------------------+
+| Field                  | Value                                |
++------------------------+--------------------------------------+
+| admin_state_up         | True                                 |
+| description            |                                      |
+| health_monitors        |                                      |
+| health_monitors_status |                                      |
+| id                     | 695d37ef-4339-4d08-8ca7-ade826e50f2a |
+| lb_method              | ROUND_ROBIN                          |
+| members                |                                      |
+| name                   | web                                  |
+| protocol               | HTTP                                 |
+| provider               | haproxy                              |
+| status                 | PENDING_CREATE                       |
+| status_description     |                                      |
+| subnet_id              | a2b72e5b-48ec-46f0-ab40-df56e698bea2 |
+| tenant_id              | c71e35d5f6034d45aad211e6a7784b6d     |
+| vip_id                 |                                      |
++------------------------+--------------------------------------+
+```
+(openstack)MacBook-Pro:DCOS matt$ neutron lb-vip-create --address 192.168.0.200 --name web --protocol-port 80 --protocol HTTP --subnet-id a2b72e5b-48ec-46f0-ab40-df56e698bea2 web
+Created a new vip:
++---------------------+--------------------------------------+
+| Field               | Value                                |
++---------------------+--------------------------------------+
+| address             | 192.168.0.200                        |
+| admin_state_up      | True                                 |
+| connection_limit    | -1                                   |
+| description         |                                      |
+| id                  | 2b106d9e-1d6a-43e6-974c-22dbef23d2b2 |
+| name                | web                                  |
+| pool_id             | 695d37ef-4339-4d08-8ca7-ade826e50f2a |
+| port_id             | 802370ec-1dc3-463a-93eb-b2edb8102f63 |
+| protocol            | HTTP                                 |
+| protocol_port       | 80                                   |
+| session_persistence |                                      |
+| status              | PENDING_CREATE                       |
+| status_description  |                                      |
+| subnet_id           | a2b72e5b-48ec-46f0-ab40-df56e698bea2 |
+| tenant_id           | c71e35d5f6034d45aad211e6a7784b6d     |
++---------------------+--------------------------------------+
+
+(openstack)MacBook-Pro:DCOS matt$ neutron lb-member-create --address 192.168.0.100 --protocol-port 80 web
+Created a new member:
++--------------------+--------------------------------------+
+| Field              | Value                                |
++--------------------+--------------------------------------+
+| address            | 192.168.0.100                        |
+| admin_state_up     | True                                 |
+| id                 | 97b15df5-e8ba-4b8b-9f7d-412c8b3fcdf1 |
+| pool_id            | 695d37ef-4339-4d08-8ca7-ade826e50f2a |
+| protocol_port      | 80                                   |
+| status             | PENDING_CREATE                       |
+| status_description |                                      |
+| tenant_id          | c71e35d5f6034d45aad211e6a7784b6d     |
+| weight             | 1                                    |
++--------------------+--------------------------------------+
+
+(openstack)MacBook-Pro:DCOS matt$ neutron floatingip-list
++--------------------------------------+------------------+---------------------+--------------------------------------+
+| id                                   | fixed_ip_address | floating_ip_address | port_id                              |
++--------------------------------------+------------------+---------------------+--------------------------------------+
+| 7c202d8a-f924-4bc1-96d9-ec9de55145dd |                  | 185.98.150.244      |                                      |
+| 8361ba16-8088-47f5-bf52-e7929a0dd4f3 | 192.168.0.11     | 185.98.151.85       | 6b63c522-2266-46ca-b4ae-830344fe8948 |
+| 87b3965a-7c88-405e-9034-b93bf9e10009 | 192.168.0.4      | 185.98.151.139      | e6722779-ccfc-4377-93a0-18d47f350848 |
++--------------------------------------+------------------+---------------------+--------------------------------------+
+
+(openstack)MacBook-Pro:DCOS matt$ neutron port-list
++--------------------------------------+------------------------------------------+-------------------+--------------------------------------------------------------------------------------+
+| id                                   | name                                     | mac_address       | fixed_ips                                                                            |
++--------------------------------------+------------------------------------------+-------------------+--------------------------------------------------------------------------------------+
+| 6b63c522-2266-46ca-b4ae-830344fe8948 |                                          | fa:16:3e:38:88:a9 | {"subnet_id": "a2b72e5b-48ec-46f0-ab40-df56e698bea2", "ip_address": "192.168.0.11"}  |
+| 802370ec-1dc3-463a-93eb-b2edb8102f63 | vip-2b106d9e-1d6a-43e6-974c-22dbef23d2b2 | fa:16:3e:be:0c:68 | {"subnet_id": "a2b72e5b-48ec-46f0-ab40-df56e698bea2", "ip_address": "192.168.0.200"} |
+| 9fae0b86-9f29-4709-a170-81ceb5a4a4d7 |                                          | fa:16:3e:11:bd:6d | {"subnet_id": "a2b72e5b-48ec-46f0-ab40-df56e698bea2", "ip_address": "192.168.0.1"}   |
+| d2796309-92d0-418e-96c5-d255a72a2ec5 |                                          | fa:16:3e:4b:bd:86 | {"subnet_id": "a2b72e5b-48ec-46f0-ab40-df56e698bea2", "ip_address": "192.168.0.2"}   |
+| d8de4921-785a-45b6-b25d-c88fc976176d |                                          | fa:16:3e:74:70:4b | {"subnet_id": "a2b72e5b-48ec-46f0-ab40-df56e698bea2", "ip_address": "192.168.0.3"}   |
+| e6722779-ccfc-4377-93a0-18d47f350848 |                                          | fa:16:3e:bd:66:a7 | {"subnet_id": "a2b72e5b-48ec-46f0-ab40-df56e698bea2", "ip_address": "192.168.0.4"}   |
++--------------------------------------+------------------------------------------+-------------------+--------------------------------------------------------------------------------------+
+
+(openstack)MacBook-Pro:DCOS matt$ neutron floatingip-associate 7c202d8a-f924-4bc1-96d9-ec9de55145dd 802370ec-1dc3-463a-93eb-b2edb8102f63
+Associated floating IP 7c202d8a-f924-4bc1-96d9-ec9de55145dd
+
+FIXME - security groups on VIP and instance
+FIXME - need to redirect hugo to non-privileged ports using iptables
+FIXME - complete LBaaS
+
+So what I've outlined in these two blog posts is a fully automatable process for creating and managing LXD containers in a standard OpenStack environment. Although I haven't tied the pieces together, hopefully it's clear that it would be trivial to do that in your language of choice given that every element can be deployed and configured without manual intervention. 
+
+Bear in mind this is a very simplistic approach and only works well for self-contained services. For this to work in more complex environments we would ideally integrate this with a discovery and orchestration toolset, perhaps based on gossip protocols like those used by [Consul/Serf](https://www.consul.io/).  
