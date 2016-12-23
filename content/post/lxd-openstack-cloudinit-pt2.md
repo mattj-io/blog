@@ -238,8 +238,6 @@ Basically what we're doing here is install the packages we need, using the packa
 
 We then pull down the website we want to serve from github, along with startup scripts for hugo, which we link into to place for systemd to use. 
 
-We also put in place an iptables redirect rule, from 80 to 8080 - this is because we want to run the hugo server as an unpriveleged user, which can't bind directly to port 80.
-
 Once all the configuration is in place, we can then use systemctl to start our service.
 
 Before we can actually start our container, we have one more connectivity issue to sort out. The reason for this is that Neutron by default is configured for port level security. This takes the form of IPtables rules on the virtual router port of the instance, which only allow traffic with the MAC/IP combination of the virtual machine to pass through.
