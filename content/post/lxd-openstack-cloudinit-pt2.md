@@ -496,7 +496,7 @@ As we did at the start to allow ssh access, let's create another one for web acc
 +--------------------------------------+------+-------------+
 ```
 
-Now we need to add a rule to the security group for SSH access. I'm going to allow from any address, but in production situations you may want to restrict that a bit more.
+Now we need to add a rule to the security group for web access. 
 
 ```
 (openstack)MacBook-Pro:DCOS matt$ nova secgroup-add-rule web tcp 80 80 0.0.0.0/0
