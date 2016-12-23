@@ -126,6 +126,7 @@ To do interesting stuff with cloud-init, we need to pass in some yaml to nova wh
 ##
 packages:
  - bridge-utils
+ - dnsmasq
 write_files:
  - path: /etc/network/interfaces
    content: |
@@ -149,7 +150,6 @@ write_files:
     dhcp-range=192.168.0.0,static,255.255.255.0
     dhcp-option=3,192.168.0.1
     no-hosts
-    dhcp-host=hugo,192.168.0.100
 lxd:
    init:
         storage_backend: dir
@@ -178,6 +178,7 @@ Because we're going to be using bridges, I want the user-space tools for viewing
 ```
 packages:
  - bridge-utils
+ - dnsmasq
 ```
 
 This is the standard pattern for a cloud-init entry, the top level key is the cloud-init module to use, and the data following is the configuration for that module. In this case, the packages module, which takes an array of package names as its data.
@@ -253,8 +254,38 @@ The nice thing about all of these commands is that cloud-init is state aware, so
 
 Now we've got all our cloud-init configuration in place, we pass that yaml file as an argument to our nova boot command. 
 
-``` 
-nova boot --image ef24441d-01ad-4006-b63d-6da67b7f1348 --flavor 8e6069a3-d8c6-4741-8e0d-6373b2ca38cc --user-data config.yaml --key-name yourkeyhere lxd_test
+```
+(openstack)MacBook-Pro:DCOS matt$ nova boot --image ef24441d-01ad-4006-b63d-6da67b7f1348 --flavor 196235bc-7ca5-4085-ac81-7e0242bda3f9 --user-data ~/LXD/DC/config.yaml --key-name datacentred lxd0
++--------------------------------------+------------------------------------------------------------------+
+| Property                             | Value                                                            |
++--------------------------------------+------------------------------------------------------------------+
+| OS-DCF:diskConfig                    | MANUAL                                                           |
+| OS-EXT-AZ:availability_zone          | nova                                                             |
+| OS-EXT-STS:power_state               | 0                                                                |
+| OS-EXT-STS:task_state                | scheduling                                                       |
+| OS-EXT-STS:vm_state                  | building                                                         |
+| OS-SRV-USG:launched_at               | -                                                                |
+| OS-SRV-USG:terminated_at             | -                                                                |
+| accessIPv4                           |                                                                  |
+| accessIPv6                           |                                                                  |
+| adminPass                            | VzUTXaAu5haG                                                     |
+| config_drive                         |                                                                  |
+| created                              | 2016-12-23T11:54:36Z                                             |
+| flavor                               | dc1.2x4.40 (196235bc-7ca5-4085-ac81-7e0242bda3f9)                |
+| hostId                               |                                                                  |
+| id                                   | f3ecfa36-be6a-4432-bacc-6bc9a7d0768e                             |
+| image                                | Ubuntu 16.04 LTS (Xenial) (ef24441d-01ad-4006-b63d-6da67b7f1348) |
+| key_name                             | datacentred                                                      |
+| metadata                             | {}                                                               |
+| name                                 | lxd0                                                             |
+| os-extended-volumes:volumes_attached | []                                                               |
+| progress                             | 0                                                                |
+| security_groups                      | default                                                          |
+| status                               | BUILD                                                            |
+| tenant_id                            | c71e35d5f6034d45aad211e6a7784b6d                                 |
+| updated                              | 2016-12-23T11:54:36Z                                             |
+| user_id                              | 73e25cbdf18a4785a1341fe59a06a9da                                 |
++--------------------------------------+------------------------------------------------------------------+
 ```
 
 Once the instance has booted, cloud-init will put in place all of our required configuration, reboot the instance, and we'll have a working LXD host with bridged networking ready to run containers. In the [next](/post/lxd-openstack-cloudinit-pt2) exciting installment, I'll move on to running containers, configuring Neutron to allow them access to the network, and using cloud-init again at the container level to configure the container on launch. 
