@@ -353,7 +353,7 @@ MacBook-Pro:~ matt$ ssh -i ~/.ssh/mattj_dc ubuntu@185.98.151.85 'lxc list hugo'
 +------+---------+----------------------+------+------------+-----------+
 | hugo | RUNNING | 192.168.0.100 (eth0) |      | PERSISTENT | 0         |
 +------+---------+----------------------+------+------------+-----------+
-
+```
 And if we test from our container host, our container has network access !
 
 ```
