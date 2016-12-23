@@ -516,6 +516,6 @@ Updated port: 7db2c0f3-f7bc-491d-bacc-951dc189b91b
 
 Now when we point a browser at our external floating IP, we reach this website !
 
-So what I've outlined in these two blog posts is a fully automatable process for creating and managing LXD containers in a standard OpenStack environment. Although I haven't tied the pieces together, hopefully it's clear that it would be trivial to do that in your language of choice given that every element can be deployed and configured without manual intervention. 
+So what I've outlined in these two blog posts is a fully automatable process for creating and managing LXD containers in a standard OpenStack environment, using only native OpenStack and cloud-init tooling. Although I haven't tied the pieces together, hopefully it's clear that it would be trivial to do that in your language of choice given that every element can be deployed and configured without manual intervention. 
 
 Bear in mind this is a very simplistic approach and only works well for self-contained services. For this to work in more complex environments we would ideally integrate this with a discovery and orchestration toolset, perhaps based on gossip protocols like those used by [Consul/Serf](https://www.consul.io/).  
