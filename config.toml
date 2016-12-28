@@ -3,7 +3,7 @@ languageCode = "en-us"
 title = "Nothing to see here"
 theme = "hugo-cactus-theme"
 # Enter your tracking code to enable Google Analytics
-googleAnalytics = ""
+googleAnalytics = "UA-89572020-1"
 # Disable comments by leaving disqusShortname empty
 disqusShortname = "www-mattjarvis-org-uk"
 
