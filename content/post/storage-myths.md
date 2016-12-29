@@ -2,7 +2,8 @@
 title = "Storage Myths"
 description = "Time to change the way we think about storage - five myths we should put out to pasture"
 date = "2015-01-21T10:56:37Z"
-
+tags = [ "Storage" ]
+categories = [ "Comment" ]
 +++
 
 This article was originally published by Tech Week Europe, the original article can be found [here](http://www.silicon.co.uk/data-storage/5-storage-myths-put-pasture-159933). As of the end of 2016, many of these concepts have already penetrated deeply into the enterprise space - object storage and distributed storage architectures are rapidly becoming the standard approaches. 

@@ -2,7 +2,8 @@
 title = "Unravelling Logs - Part 1"
 description = "Making sense of logs in distributed systems"
 date = "2015-11-10T08:06:37Z"
-
+tags = [ "log analysis", "Cloud", "Logstash", "Elasticsearch", "Kibana" ]
+series = [ "Log Analysis" ]
 +++
 
 Traditionally in enterprise IT environments, logs have tended to be used mainly for auditability purposes, and to enable post incident root cause analysis. 

@@ -2,7 +2,8 @@
 date = "2016-12-15T11:40:59Z"
 description = "Adventures with container networking"
 title = "LXD, OpenStack and cloud-init - Part 1"
-
+tags = [ "Cloud", "OpenStack", "LXD", "cloud-init" ]
+series = [ "LXD" ]
 +++
 
 I've recently started playing with LXC containers, both on physical hardware and in the cloud. This blog is itself running in a LXC container running on a virtual machine in an OpenStack public cloud.

@@ -2,7 +2,7 @@
 title = "Nova Rescue"
 description = "Using the rescue functionality in Nova"
 date = "2015-10-22T07:56:59Z"
-
+tags = [ "OpenStack" ]
 +++
 
 Occasionally you may have a situation where a virtual machine won't boot correctly, or you cannot get into it. 

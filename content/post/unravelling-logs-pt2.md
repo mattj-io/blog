@@ -2,7 +2,8 @@
 description = "Making sense of logs in distributed systems"
 date = "2015-11-11T08:12:35Z"
 title = "Unravelling Logs - Part 2"
-
+tags = [ "log analysis", "Cloud", "Logstash", "Elasticsearch", "Kibana" ]
+series = [ "Log Analysis" ]
 +++
 
 ##### 2016 UPDATE

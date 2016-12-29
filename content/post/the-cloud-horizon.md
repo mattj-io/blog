@@ -2,7 +2,8 @@
 title = "The Cloud Horizon"
 description = "Cloud horizon: the emerging world of on-demand computing"
 date = "2014-11-24T10:35:01Z"
-
+tags = [ "Cloud" ]
+categories = [ "Comment" ]
 +++
 
 This article was first published on Information Age, the original article is [here](http://www.information-age.com/cloud-horizon-emerging-world-demand-computing-2-123458671/). As of 2016, it's yet to be seen if this if any of this is accurate, although a number of [commentators](https://a16z.com/2016/12/16/the-end-of-cloud-computing/) are now talking about smaller more localised cloud provision perhaps ending up as the dominant model, we've seen the concepts of [Fog](https://www.openfogconsortium.org/) and [Edge](https://en.wikipedia.org/wiki/Edge_computing) computing becoming more tangible, and we're certainly seeing specialised clouds [appearing](http://www.hnscicloud.eu/the-hnscicloud-tender).
