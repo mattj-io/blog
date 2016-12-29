@@ -3,7 +3,6 @@ title = "LXD, OpenStack and cloud-init - Part 2"
 description = "More adventures with container networking"
 date = "2016-12-18T13:03:07Z"
 tags = [ "Cloud", "OpenStack", "LXD", "cloud-init" ]
-series = [ "LXD" ]
 +++
 
 So in my previous post, we automatically deployed and configured an LXD host into our OpenStack public cloud tenancy, using only the native features of OpenStack and cloud-init. 
