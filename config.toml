@@ -7,6 +7,11 @@ googleAnalytics = "UA-89572020-1"
 # Disable comments by leaving disqusShortname empty
 disqusShortname = "www-mattjarvis-org-uk"
 
+[taxonomies]
+    tag = "tags"
+    category = "categories"
+    series = "series"
+
 [params]
 	name = "Matt Jarvis"
 	description = "That rug really tied the room together"
