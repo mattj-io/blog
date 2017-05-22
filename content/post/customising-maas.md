@@ -38,14 +38,18 @@ The userdata which curtin uses is located in the etc/maas/preseeds/ directory on
 
 All userdata files use the same prefix ‘curtin_userdata’. You can see the other elements that MAAS uses to refer to images in the folder structure where MAAS stores images - /var/lib/boot-resources/current. 
 
-So, for example, for CentOS, we can see MAAS uses the folder structure :
+So, for example, for CentOS, we can see MAAS uses the folder structure:
+
 ```
 /var/lib/maas/boot-resources/current/centos/amd64/generic/centos70/
 ```
+
 Therefore if we want to create custom userdata that will apply to all CentOS 7 installs on x86_64, we need to create a file in /etc/maas/preseeds called :
+
 ```
 curtin_userdata_centos_amd64_generic_centos70
 ```
+
 The easiest way to do this is to copy the generic centos userdata file and use that as a template. Make sure the ownership and permissions are the same as the other files in the directory. 
 
 ```
