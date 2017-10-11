@@ -1,6 +1,6 @@
 +++
 title = "Developing native microservices for Marathon in Python"
-date = 2017-10-11T18:33:03+01:00
+date = "2017-10-11T18:33:03+01:00"
 description = ""
 +++
 Deploying microservices in Docker containers is a great way of ensuring immutability in the operating environment that your microservice needs, giving you exactly the dependencies and runtime versions that your application expects. However, as microservices get smaller, the overhead of running additional filesystems, libraries, binaries and runtimes just to run a few lines of code can seem like overkill. In many cases, Docker containers can end up very large, which somewhat defeats the point of containerisation in the first place.
