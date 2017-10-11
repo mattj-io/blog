@@ -1,12 +1,11 @@
----
-title: "Deploying PySpark jobs using DC/OS"
-date: 2017-10-11T19:22:46+01:00
-draft: true
----
++++
+title = "Deploying PySpark jobs using DC/OS"
+date = "2017-10-11T19:22:46+01:00"
++++
 
 I've recently been working with PySpark, building a natural language processing pipeline demo for DC/OS. This has been a great learning experience, and PySpark provides an easier entry point into the world of Spark programming for a systems guy like myself than having to learn Java or Scala
 
-When you're developing Spark jobs, testing locally is a very different environment from deploying to a cluster, so it's not always straightforward working out how to deploy to a system like DC/OS once you think you've got a working job. The Spark docs aren't particularly clear with respect to Python, especially where you've got dependent libraries involved - a very different case from the Java world of uploading a jar file. There's also seen to be a bunch of different approaches to doing this 
+When you're developing Spark jobs, testing locally is a very different environment from deploying to a cluster, so it's not always straightforward working out how to deploy to a Spark cluster on DC/OS once you think you've got a working job. The Spark docs also aren't particularly clear with respect to Python, especially where you've got dependent libraries involved - a very different case from the Java world of uploading a jar file, and most data folks use Scala or Java, so Google isn't necessarily your friend either. 
 
 So let's look at the problem space. I have a PySpark job which needs a couple of external Python libraries, numpy and kafka, and also needs an additional Spark module, spark-sql-kafka. 
 
@@ -16,7 +15,7 @@ When I'm running it locally, I have the Python libraries installed, in this case
 spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.2.0 spark_kafka.py
 ```
 
-When I move it to DC/OS, my first problem is how do I include my dependent Python libraries. Spark has a CLI argument --py-files which takes a comma separated list, but for even a small module this would be pretty unwieldy. If we look at the contents of our two dependent modules, we can see they are made up of a bunch of different files :
+When I move it to DC/OS, my first problem is how do I include my dependent Python libraries. Spark has a CLI argument --py-files which takes a comma separated list, but for even a small module this would be pretty unwieldy. If we look at the contents of our two dependent modules, we can see they are made up of a whole bunch of different files :
 
 ```
 Mattbook-Pro:site-packages matt$ ls kafka*
@@ -103,7 +102,7 @@ dcos spark run --submit-args="--py-files=https://raw.githubusercontent.com/mattj
 
 Note that any arguments for Spark directly precede the job on the DC/OS CLI, arguments after the job are interpreted as to be passed to the job itself.
 
-So my next problem is that I need to include a Spark library, spark-sql-kafka, which I only have a Maven co-ordinate for. The DC/OS Spark CLI extension doesn't have the --packages switch, so how can I pass this into Spark ? Yes, I could directly go into the cluster, start running things manually, but my aim here is automation so I want to just be exercising the DC/OS CLI directly. 
+So my next problem is that I need to include a Spark library, spark-sql-kafka, which I only have Maven co-ordinates for. The DC/OS Spark CLI extension doesn't support the --packages switch, so how can I pass this into Spark ? Yes, I could manually go into the cluster, start running things by hand, but my aim here is full automation so I want to just be exercising the DC/OS CLI directly. 
 
 After a lot of hair pulling and googling, I noticed the DC/OS CLI has a --submit-args switch to set Spark configuration values :
 
