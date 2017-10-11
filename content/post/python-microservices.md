@@ -1,5 +1,5 @@
 +++
-title = "Developing native microservices for Marathon in Python"
+title = "Developing native microservices for Mesos in Python"
 date = "2017-10-11T18:33:03+01:00"
 description = ""
 +++
