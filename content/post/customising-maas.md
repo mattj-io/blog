@@ -4,6 +4,11 @@ description = "Customising installs using MAAS"
 date = "2017-05-22T14:56:39+01:00"
 
 +++
+
+This post was also published on the [Ubuntu blog](https://blog.ubuntu.com/2017/06/02/customising-maas-installs) in June 2017
+
+-------------------
+
 Canonical's [MAAS](https://maas.io) is a bare metal provisioning and lifecycle management system. In this post, we'll look at customising installs provisioned by MAAS to enable site specific configuration. 
 
 Historically, the paradigm for bare metal machine installation has been to use a ‘golden master’ image, which contains in it all of the site specific customisation required for operations. This brings with it a lot of complexity around maintenance, since the images are fixed. Updating requires building entirely new images each time, and normally requires maintaining libraries of brittle shell scripts to do the customisation and build the image. 
