@@ -1,7 +1,6 @@
 ---
 title: "Deploying Kubernetes as a service on DC/OS"
 date: 2018-06-03T22:03:44+01:00
-draft: true
 ---
 
 DC/OS frameworks are much more than just package installers; they provide a mechanism for full lifecycle management for complex applications, bundling operational best practices with automation of common actions such as scaling and upgrading. Distributed systems require complex playbooks for such operations, and the Mesos concept of application-aware scheduling makes it easy to deliver complex software as-a-Service.
