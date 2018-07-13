@@ -1,10 +1,10 @@
 ---
 title: "It was the best of times, it was the worst of times"
-date: 2018-07-13T16:58:51+01:00
+date: 2017-06-13T16:58:51+01:00
 draft: true
 ---
 
-This post was originally published back in April 2017 on [ Superyesmore ](https://superyesmore.com/it-was-the-best-of-times-it-was-the-worst-of-times-3550195ee116466b13df6da51673c250) as part of their [Human In The Machine](https://superyesmore.com/publication/the-human-in-the-machine-a4064599cde2cb3397239e8d72219f48) series.
+This post was originally published in April 2017 on [ Superyesmore ](https://superyesmore.com/it-was-the-best-of-times-it-was-the-worst-of-times-3550195ee116466b13df6da51673c250) as part of their [Human In The Machine](https://superyesmore.com/publication/the-human-in-the-machine-a4064599cde2cb3397239e8d72219f48) series.
 
 ------------------------
  
