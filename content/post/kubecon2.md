@@ -1,5 +1,5 @@
 ---
-title: "Kubecon2"
+title: "KubeCon 2018 - What Goes Around Comes Around"
 date: 2018-05-04T22:30:57+01:00
 draft: false
 ---
