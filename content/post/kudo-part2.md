@@ -84,15 +84,15 @@ wsrep_cluster_address = gcomm://{{ .Name }}-bootstrap-svc,{{ $.Name }}-{{ $.Oper
 Before we break this code down, let's clarify a couple of assumptions that we can make :
 
 1. Our nodes will be in a StatefulSet, so we can predict the naming will be *.Name-.OperatorName-number*, where *.Name* and *.OperatorName* are created by KUDO.
-2. We will be creating a headless service to access them, which we will name as *.Name-hs* to ensure uniqueness, and we will document that later in this blog. That will give us predictable DNS entries for each node in our StatefulSet in the format *.Name-.OperatorName-0..Name-hs*
+2. We will be creating a headless service to access them, which we will name as *.Name-hs* to ensure uniqueness, and we will document that later in this blog. That will give us predictable DNS entries for each node in our StatefulSet in the format *.Name-.OperatorName-0.Name-hs*
 
-Working from those assumptions we can start to put together the connection string. Firstly we add the service address for our bootstrap node, which we created in the last blog :
+Working from those assumptions we can start to put together the connection string. Firstly we add the service address for our bootstrap node, which we created in the last blog, followed by a comma :
 
 ```
 gcomm://{{ .Name }}-bootstrap-svc,
 ```
 
-We also know there will always be a node ending in 0, so we can add the DNS entry for that nodes service anyway
+We also know there will always be a node ending in 0, since we must have at least 1 node, so we can add the DNS entry for that nodes service anyway
 
 ```
 gcomm://{{ .Name }}-bootstrap-svc,{{ $.Name }}-{{ $.OperatorName }}-0.{{ $.Name }}-hs
@@ -532,9 +532,27 @@ initContainers:
             mountPath: "/datadir"
 ```
 
-We are using our NODE_COUNT parameter to set how many replicas should be in this StatefulSet, and defining the ports using the parameters we set for those in the first of these blog posts.
+We are using our NODE_COUNT parameter to set how many replicas should be in this StatefulSet
 
-Let’s go ahead and test this part of our operator - for testing purposes you may want to set NODE_COUNT to 1.
+```
+  replicas: {{ .Params.NODE_COUNT }}
+```
+
+And we are also defining the ports using the parameters we set for those in the first of these blog posts.
+
+```
+        ports:
+        - containerPort: {{ .Params.MYSQL_PORT }}
+          name: mysql
+        - containerPort: {{ .Params.SST_PORT }}
+          name: sst
+        - containerPort: {{ .Params.REPLICATION_PORT }}
+          name: replication
+        - containerPort: {{ .Params.IST_PORT }}
+          name: ist
+```
+
+Let’s go ahead and test this part of our operator - for testing purposes you may want to set NODE_COUNT to 1 in your params.yaml.
 
 ```
 MacBook-Pro:operator matt$ kubectl kudo plan status --instance galera-instance
